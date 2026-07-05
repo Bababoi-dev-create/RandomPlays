@@ -419,6 +419,8 @@
       font-size: 12px;
       margin-top: 4px;
       font-weight: 600;
+      display: block;
+      min-height: 18px;
     }
 
     .toggle-auth {
@@ -1183,6 +1185,7 @@
 
       <div class="login-form">
         <div id="loginForm" style="display: block;">
+          <h3 style="color: #333; margin-bottom: 24px; font-size: 18px;">Login</h3>
           <div class="form-group">
             <label class="form-label">Username</label>
             <input type="text" id="loginUsername" class="form-input" placeholder="Enter your username">
@@ -1198,18 +1201,21 @@
         </div>
 
         <div id="signupForm" style="display: none;">
+          <h3 style="color: #333; margin-bottom: 24px; font-size: 18px;">Sign Up</h3>
           <div class="form-group">
             <label class="form-label">Username</label>
             <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username">
-            <div class="error-message" id="usernameError"></div>
+            <span class="error-message" id="usernameError"></span>
           </div>
           <div class="form-group">
             <label class="form-label">Email</label>
             <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email">
+            <span class="error-message" id="emailError"></span>
           </div>
           <div class="form-group">
             <label class="form-label">Password</label>
             <input type="password" id="signupPassword" class="form-input" placeholder="Create a password">
+            <span class="error-message" id="passwordError"></span>
           </div>
           <button class="btn btn-primary" onclick="handleSignup()">Sign Up</button>
           <div class="toggle-auth">
@@ -1496,6 +1502,7 @@
           registeredUsers = {};
         }
       } catch (e) {
+        console.error('Error loading users:', e);
         registeredUsers = {};
       }
     }
@@ -1547,9 +1554,16 @@
       const signupForm = document.getElementById('signupForm');
       loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
       signupForm.style.display = signupForm.style.display === 'none' ? 'block' : 'none';
+      
+      // Clear all error messages and inputs
       document.getElementById('usernameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
       document.getElementById('loginUsername').value = '';
       document.getElementById('loginPassword').value = '';
+      document.getElementById('signupUsername').value = '';
+      document.getElementById('signupEmail').value = '';
+      document.getElementById('signupPassword').value = '';
     }
 
     function handleLogin() {
@@ -1582,22 +1596,37 @@
       const username = document.getElementById('signupUsername').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
-      const errorEl = document.getElementById('usernameError');
+      
+      // Clear all error messages
+      document.getElementById('usernameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
 
-      errorEl.textContent = '';
+      // Validate inputs
+      let hasError = false;
 
-      if (!username || !email || !password) {
-        errorEl.textContent = 'All fields required';
-        return;
+      if (!username) {
+        document.getElementById('usernameError').textContent = 'Username is required';
+        hasError = true;
+      } else if (username.length < 3) {
+        document.getElementById('usernameError').textContent = 'Username must be 3+ characters';
+        hasError = true;
+      } else if (registeredUsers.hasOwnProperty(username)) {
+        document.getElementById('usernameError').textContent = 'Username already taken';
+        hasError = true;
       }
 
-      if (registeredUsers[username]) {
-        errorEl.textContent = 'Username already taken';
-        return;
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required';
+        hasError = true;
       }
 
-      if (username.length < 3) {
-        errorEl.textContent = 'Username must be 3+ characters';
+      if (!password) {
+        document.getElementById('passwordError').textContent = 'Password is required';
+        hasError = true;
+      }
+
+      if (hasError) {
         return;
       }
 
@@ -1636,6 +1665,8 @@
       gameState = { username: "" };
       document.getElementById('loginForm').style.display = 'block';
       document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
       showScreen('loginScreen');
     }
 
