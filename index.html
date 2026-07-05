@@ -4,6 +4,8 @@
   <title>RandomPlays</title>
   <link rel="manifest" href="manifest.json">
   <script src="serviceworker.js"></script>
+  <!-- EmailJS Library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -60,6 +62,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      padding: 20px;
     }
 
     .modal-overlay.active {
@@ -80,6 +83,7 @@
       text-align: center;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 100%;
     }
 
     .modal-icon {
@@ -105,10 +109,12 @@
       display: flex;
       gap: 12px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .modal-btn {
       flex: 1;
+      min-width: 120px;
       padding: 12px 24px;
       border: none;
       border-radius: 12px;
@@ -139,6 +145,16 @@
     .modal-btn-secondary:hover {
       background: #667eea;
       color: white;
+    }
+
+    .modal-btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .modal-btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
     }
 
     .container {
@@ -432,6 +448,22 @@
     .toggle-auth a {
       color: #667eea;
       font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 0 4px;
+    }
+
+    .auth-links {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .auth-links a {
+      color: #667eea;
+      font-weight: 600;
       cursor: pointer;
       text-decoration: none;
     }
@@ -1104,6 +1136,23 @@
       color: #667eea;
     }
 
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     @media (max-width: 480px) {
       .container {
         padding: 24px;
@@ -1148,6 +1197,14 @@
         width: 40px;
         height: 40px;
       }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-btn {
+        min-width: auto;
+      }
     }
   </style>
 </head>
@@ -1177,6 +1234,55 @@
     </div>
   </div>
 
+  <!-- PASSWORD RESET MODAL -->
+  <div class="modal-overlay" id="resetPasswordModal">
+    <div class="modal-content">
+      <div class="modal-icon" id="resetIcon">🔐</div>
+      <div class="modal-title" id="resetTitle">Reset Password</div>
+      <div id="resetForm">
+        <div style="text-align: left;">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" id="resetUsername" class="form-input" placeholder="Enter your username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="resetEmail" class="form-input" placeholder="Enter your email">
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-secondary" onclick="closeResetPasswordModal()">Cancel</button>
+          <button class="modal-btn modal-btn-primary" id="sendResetBtn" onclick="handlePasswordReset()">Send Email</button>
+        </div>
+      </div>
+      <div id="resetSuccess" style="display: none;">
+        <div class="modal-text">✅ Password reset email sent to your inbox!</div>
+        <div class="modal-text" style="font-size: 13px; color: #999;">Check your email for instructions to reset your password.</div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-primary" onclick="closeResetPasswordModal()">Back to Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE ACCOUNT MODAL -->
+  <div class="modal-overlay" id="deleteAccountModal">
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <div class="modal-title">Delete Account</div>
+      <div class="modal-text">
+        Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently lost.
+      </div>
+      <div style="background: #ffe0e0; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #c33;">
+        <strong>Warning:</strong> Your game progress, stats, coins, and cosmetics will be deleted forever.
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-secondary" onclick="closeDeleteAccountModal()">Cancel</button>
+        <button class="modal-btn modal-btn-danger" onclick="confirmDeleteAccount()">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
   <!-- LOGIN SCREEN -->
   <div class="screen active" id="loginScreen">
     <div class="container login-container">
@@ -1195,6 +1301,9 @@
             <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password">
           </div>
           <button class="btn btn-primary" onclick="handleLogin()">Login</button>
+          <div class="auth-links">
+            <a onclick="openResetPasswordModal()">Forgot Password?</a>
+          </div>
           <div class="toggle-auth">
             Don't have an account? <a onclick="toggleAuthForm()">Sign Up</a>
           </div>
@@ -1422,8 +1531,9 @@
       <div class="section-label">More</div>
 
       <button class="btn btn-secondary" onclick="alert('Settings updated')">🔔 Notifications</button>
-      <button class="btn btn-secondary" onclick="alert('Privacy Policy')">🔒 Privacy Policy</button>
-      <button class="btn btn-danger" onclick="logout()">Logout</button>
+      <button class="btn btn-secondary" onclick="openResetPasswordModal()">🔐 Change Password</button>
+      <button class="btn btn-danger" onclick="openDeleteAccountModal()">🗑️ Delete Account</button>
+      <button class="btn btn-secondary" onclick="logout()">Logout</button>
     </div>
   </div>
 
@@ -1490,6 +1600,17 @@
   </div>
 
   <script>
+    // Initialize EmailJS
+    emailjs.init({
+      publicKey: 'fqwhMrMPYWIIABTaf',  // We'll update this below
+    });
+
+    // Note: For testing, you'll need to:
+    // 1. Create a free account at https://www.emailjs.com/
+    // 2. Create an email service (Gmail recommended)
+    // 3. Get your public key and replace 'YOUR_PUBLIC_KEY_HERE' above
+    // 4. Create an email template with these variables: {username}, {reset_link}
+
     // Registered Users System
     let registeredUsers = {};
     
@@ -1658,6 +1779,106 @@
       document.getElementById('signupPassword').value = '';
       
       navigateHome();
+    }
+
+    // Password Reset Functions
+    function openResetPasswordModal() {
+      document.getElementById('resetPasswordModal').classList.add('active');
+      document.getElementById('resetForm').style.display = 'block';
+      document.getElementById('resetSuccess').style.display = 'none';
+      document.getElementById('resetUsername').value = '';
+      document.getElementById('resetEmail').value = '';
+      document.getElementById('sendResetBtn').textContent = 'Send Email';
+      document.getElementById('sendResetBtn').disabled = false;
+    }
+
+    function closeResetPasswordModal() {
+      document.getElementById('resetPasswordModal').classList.remove('active');
+    }
+
+    async function handlePasswordReset() {
+      const username = document.getElementById('resetUsername').value.trim();
+      const email = document.getElementById('resetEmail').value.trim();
+      const sendBtn = document.getElementById('sendResetBtn');
+
+      if (!username || !email) {
+        showError('Error', 'Please enter username and email');
+        return;
+      }
+
+      if (!registeredUsers[username]) {
+        showError('Error', 'Username not found');
+        return;
+      }
+
+      if (registeredUsers[username].email !== email) {
+        showError('Error', 'Email does not match');
+        return;
+      }
+
+      // Show loading state
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="loading-spinner"></span>Sending...';
+
+      try {
+        // Generate reset token (in real app, this would be secure)
+        const resetToken = Math.random().toString(36).substr(2, 9);
+        localStorage.setItem(`resetToken_${username}`, resetToken);
+        
+        // Send email using EmailJS
+        await emailjs.send('service_q84197q', 'template_v473w2b', {
+          username: username,
+          user_email: email,
+          reset_link: `https://yourapp.com/reset?token=${resetToken}&user=${username}`
+        });
+
+        // Show success message
+        document.getElementById('resetForm').style.display = 'none';
+        document.getElementById('resetSuccess').style.display = 'block';
+        document.getElementById('resetIcon').textContent = '📧';
+        document.getElementById('resetTitle').textContent = 'Email Sent!';
+
+      } catch (error) {
+        console.error('Email send failed:', error);
+        // Even if email fails, show success (graceful degradation)
+        // In production, you'd want to handle this differently
+        showError('Error', 'Failed to send email. Please try again later.');
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send Email';
+      }
+    }
+
+    // Delete Account Functions
+    function openDeleteAccountModal() {
+      document.getElementById('deleteAccountModal').classList.add('active');
+    }
+
+    function closeDeleteAccountModal() {
+      document.getElementById('deleteAccountModal').classList.remove('active');
+    }
+
+    function confirmDeleteAccount() {
+      const username = gameState.username;
+
+      if (!username) {
+        showError('Error', 'No user logged in');
+        return;
+      }
+
+      // Delete user from registered users
+      delete registeredUsers[username];
+      saveRegisteredUsers();
+
+      // Delete user's game state
+      localStorage.removeItem(`randomplaysState_${username}`);
+      localStorage.removeItem(`resetToken_${username}`);
+
+      // Close modal and logout
+      closeDeleteAccountModal();
+      logout();
+      
+      // Show success message
+      showError('Account Deleted', 'Your account has been permanently deleted');
     }
 
     function logout() {
