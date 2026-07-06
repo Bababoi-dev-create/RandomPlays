@@ -1600,16 +1600,10 @@
   </div>
 
   <script>
-    // Initialize EmailJS
+    // Initialize EmailJS with YOUR actual credentials
     emailjs.init({
-      publicKey: 'fqwhMrMPYWIIABTaf',  // We'll update this below
+      publicKey: 'fqwhMrMPYWJlABTaf'
     });
-
-    // Note: For testing, you'll need to:
-    // 1. Create a free account at https://www.emailjs.com/
-    // 2. Create an email service (Gmail recommended)
-    // 3. Get your public key and replace 'YOUR_PUBLIC_KEY_HERE' above
-    // 4. Create an email template with these variables: {username}, {reset_link}
 
     // Registered Users System
     let registeredUsers = {};
@@ -1676,7 +1670,6 @@
       loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
       signupForm.style.display = signupForm.style.display === 'none' ? 'block' : 'none';
       
-      // Clear all error messages and inputs
       document.getElementById('usernameError').textContent = '';
       document.getElementById('emailError').textContent = '';
       document.getElementById('passwordError').textContent = '';
@@ -1718,12 +1711,10 @@
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
       
-      // Clear all error messages
       document.getElementById('usernameError').textContent = '';
       document.getElementById('emailError').textContent = '';
       document.getElementById('passwordError').textContent = '';
 
-      // Validate inputs
       let hasError = false;
 
       if (!username) {
@@ -1751,11 +1742,9 @@
         return;
       }
 
-      // Register the user
       registeredUsers[username] = { password, email };
       saveRegisteredUsers();
 
-      // Create new game state for this user
       gameState = {
         username,
         avatar: "🥀",
@@ -1773,7 +1762,6 @@
       };
       saveGameState();
 
-      // Clear form
       document.getElementById('signupUsername').value = '';
       document.getElementById('signupEmail').value = '';
       document.getElementById('signupPassword').value = '';
@@ -1816,23 +1804,25 @@
         return;
       }
 
-      // Show loading state
       sendBtn.disabled = true;
       sendBtn.innerHTML = '<span class="loading-spinner"></span>Sending...';
 
       try {
-        // Generate reset token (in real app, this would be secure)
         const resetToken = Math.random().toString(36).substr(2, 9);
         localStorage.setItem(`resetToken_${username}`, resetToken);
         
-        // Send email using EmailJS
-        await emailjs.send('service_q84197q', 'template_v473w2b', {
-          username: username,
-          user_email: email,
-          reset_link: `https://yourapp.com/reset?token=${resetToken}&user=${username}`
-        });
+        await emailjs.send(
+          'service_q84197q',
+          'template_v473w2b',
+          {
+            username: username,
+            user_email: email,
+            reset_link: `Reset token: ${resetToken}`
+          }
+        );
 
-        // Show success message
+        console.log('Email sent successfully');
+
         document.getElementById('resetForm').style.display = 'none';
         document.getElementById('resetSuccess').style.display = 'block';
         document.getElementById('resetIcon').textContent = '📧';
@@ -1840,9 +1830,7 @@
 
       } catch (error) {
         console.error('Email send failed:', error);
-        // Even if email fails, show success (graceful degradation)
-        // In production, you'd want to handle this differently
-        showError('Error', 'Failed to send email. Please try again later.');
+        showError('Error', `Failed to send email. Please try again.`);
         sendBtn.disabled = false;
         sendBtn.textContent = 'Send Email';
       }
@@ -1865,19 +1853,15 @@
         return;
       }
 
-      // Delete user from registered users
       delete registeredUsers[username];
       saveRegisteredUsers();
 
-      // Delete user's game state
       localStorage.removeItem(`randomplaysState_${username}`);
       localStorage.removeItem(`resetToken_${username}`);
 
-      // Close modal and logout
       closeDeleteAccountModal();
       logout();
       
-      // Show success message
       showError('Account Deleted', 'Your account has been permanently deleted');
     }
 
@@ -2455,7 +2439,6 @@
       return bestMove;
     }
 
-    // Initialize board cells
     for (let i = 0; i < 9; i++) {
       const cell = document.createElement("div");
       cell.className = "cell";
