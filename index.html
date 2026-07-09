@@ -222,7 +222,6 @@
       cursor: pointer;
       font-size: 18px;
       transition: all 0.3s ease;
-      font-weight: 600;
     }
 
     .icon-btn:hover {
@@ -408,6 +407,7 @@
       transform: translateY(-2px);
     }
 
+    /* ===== LOGIN SCREEN ===== */
     .login-container {
       text-align: center;
     }
@@ -508,6 +508,7 @@
       text-decoration: none;
     }
 
+    /* ===== TABS ===== */
     .tab-navigation {
       display: flex;
       gap: 12px;
@@ -536,6 +537,7 @@
       border-bottom-color: #667eea;
     }
 
+    /* ===== BATTLE PASS ===== */
     .bp-progress {
       margin-bottom: 24px;
     }
@@ -630,6 +632,7 @@
       font-size: 16px;
     }
 
+    /* ===== DASHBOARD ===== */
     .back-btn {
       background: #f5f7fa;
       color: #667eea;
@@ -722,6 +725,7 @@
       margin: 24px 0;
     }
 
+    /* ===== SETTINGS ===== */
     .settings-item {
       padding: 16px 0;
       border-bottom: 1px solid #e0e0e0;
@@ -743,6 +747,34 @@
     .settings-value {
       font-size: 14px;
       color: #999;
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .avatar-option {
+      font-size: 40px;
+      padding: 12px;
+      background: #f5f7fa;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .avatar-option:hover {
+      transform: scale(1.1);
+      background: #e8ecf7;
+    }
+
+    .avatar-option.selected {
+      border-color: #667eea;
+      background: #667eea;
     }
 
     .shop-item {
@@ -816,6 +848,7 @@
       color: white;
     }
 
+    /* ===== GAME SCREEN ===== */
     .game-header {
       display: flex;
       justify-content: space-between;
@@ -832,6 +865,7 @@
       background-clip: text;
     }
 
+    /* ===== TIC TAC TOE ===== */
     .board {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1057,6 +1091,7 @@
     .mode-btn[data-level="hard"] { --mode-color: #ef4444; }
     .mode-btn[data-level="impossible"] { --mode-color: #8b5cf6; }
 
+    /* ===== LUDO ===== */
     .ludo-container {
       display: flex;
       flex-direction: column;
@@ -1114,6 +1149,10 @@
       box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
     }
 
+    .ludo-dice:active {
+      transform: translateY(-2px) scale(1.02);
+    }
+
     .ludo-info {
       width: 100%;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -1137,58 +1176,21 @@
       color: #667eea;
     }
 
-    .volume-control {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 16px 0;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      padding: 16px;
-      border-radius: 12px;
-    }
-
-    .volume-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #333;
-      min-width: 40px;
-    }
-
-    .volume-slider {
-      flex: 1;
-      height: 6px;
-      border-radius: 3px;
-      background: #e0e0e0;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      cursor: pointer;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
     }
 
-    .volume-slider::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      cursor: pointer;
-      border: none;
-    }
-
-    .volume-value {
-      min-width: 30px;
-      text-align: right;
-      font-size: 12px;
-      font-weight: 700;
-      color: #667eea;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     @media (max-width: 480px) {
@@ -1218,6 +1220,10 @@
         font-size: 36px;
       }
 
+      .avatar-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
       .bp-rewards {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -1225,6 +1231,11 @@
       .ludo-board {
         width: 250px;
         height: 250px;
+      }
+
+      .ludo-square {
+        width: 40px;
+        height: 40px;
       }
 
       .modal-buttons {
@@ -1269,6 +1280,7 @@
       <div class="modal-icon" id="resetIcon">🔐</div>
       <div class="modal-title" id="resetTitle">Reset Password</div>
       
+      <!-- STEP 1: ENTER USERNAME -->
       <div id="resetStep1">
         <div style="text-align: left;">
           <div class="form-group">
@@ -1282,6 +1294,7 @@
         </div>
       </div>
 
+      <!-- STEP 2: ANSWER SECURITY QUESTION -->
       <div id="resetStep2" style="display: none;">
         <div style="text-align: left; margin-bottom: 20px;">
           <div class="form-group">
@@ -1296,6 +1309,7 @@
         </div>
       </div>
 
+      <!-- STEP 3: SET NEW PASSWORD -->
       <div id="resetStep3" style="display: none;">
         <div style="text-align: left;">
           <div class="form-group">
@@ -1315,6 +1329,7 @@
         </div>
       </div>
 
+      <!-- SUCCESS MESSAGE -->
       <div id="resetSuccess" style="display: none;">
         <div class="modal-text">✅ Password reset successful!</div>
         <div class="modal-text" style="font-size: 13px; color: #999;">You can now login with your new password.</div>
@@ -1350,6 +1365,7 @@
       <div class="tagline">Play. Compete. Win.</div>
 
       <div class="login-form">
+        <!-- LOGIN FORM -->
         <div id="loginForm" style="display: block;">
           <h3 style="color: #333; margin-bottom: 24px; font-size: 18px;">Login</h3>
           <div class="form-group">
@@ -1369,17 +1385,13 @@
           </div>
         </div>
 
+        <!-- SIGNUP FORM -->
         <div id="signupForm" style="display: none;">
           <h3 style="color: #333; margin-bottom: 24px; font-size: 18px;">Sign Up</h3>
           <div class="form-group">
             <label class="form-label">Username</label>
             <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username">
             <span class="error-message" id="usernameError"></span>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email">
-            <span class="error-message" id="emailError"></span>
           </div>
           <div class="form-group">
             <label class="form-label">Password</label>
@@ -1400,8 +1412,6 @@
               <option value="what_is_your_dream_job">What is your dream job?</option>
               <option value="what_school_did_you_attend">What school did you first attend?</option>
               <option value="what_is_your_favorite_book">What is your favorite book?</option>
-              <option value="what_is_your_favorite_sport">What is your favorite sport?</option>
-              <option value="what_is_your_favorite_artist">What is your favorite artist?</option>
             </select>
             <span class="error-message" id="questionError"></span>
           </div>
@@ -1430,7 +1440,7 @@
         <div class="header-icons">
           <button class="icon-btn" onclick="navigateToDashboard()">📊</button>
           <button class="icon-btn" onclick="navigateToSettings()">⚙️</button>
-          <button class="sound-toggle" id="soundToggle" onclick="toggleSoundMute()">🔊</button>
+          <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊</button>
         </div>
       </div>
 
@@ -1614,18 +1624,11 @@
       <div class="divider"></div>
 
       <div class="section-label">Sound</div>
-      
-      <div class="volume-control">
-        <span class="volume-label">Volume</span>
-        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70" onchange="updateVolume()">
-        <span class="volume-value" id="volumeValue">70%</span>
-      </div>
-
-      <button class="btn btn-secondary" id="soundMuteBtn" onclick="toggleSoundMute()">🔊 Sound: ON</button>
+      <button class="btn btn-secondary" id="soundSettingBtn" onclick="toggleSound()">🔊 Sound: ON</button>
 
       <div class="section-label">More</div>
 
-      <button class="btn btn-secondary" onclick="alert('Notifications Settings')">🔔 Notifications</button>
+      <button class="btn btn-secondary" onclick="alert('Settings updated')">🔔 Notifications</button>
       <button class="btn btn-secondary" onclick="openResetPasswordModal()">🔐 Change Password</button>
       <button class="btn btn-danger" onclick="openDeleteAccountModal()">🗑️ Delete Account</button>
       <button class="btn btn-secondary" onclick="logout()">Logout</button>
@@ -1695,27 +1698,19 @@
   </div>
 
   <script>
-    // ===== SOUND SYSTEM WITH VOLUME CONTROL =====
+    // ===== SOUND SYSTEM =====
     let soundEnabled = true;
-    let soundVolume = 0.7; // 0-1
     
+    // Load sound preference
     function loadSoundPreference() {
-      const savedEnabled = localStorage.getItem('randomplaysSoundEnabled');
-      const savedVolume = localStorage.getItem('randomplaysSoundVolume');
-      
-      if (savedEnabled !== null) {
-        soundEnabled = savedEnabled === 'true';
+      const saved = localStorage.getItem('randomplaysSoundEnabled');
+      if (saved !== null) {
+        soundEnabled = saved === 'true';
       }
-      if (savedVolume !== null) {
-        soundVolume = parseFloat(savedVolume);
-      }
-      
       updateSoundButton();
-      document.getElementById('volumeSlider').value = soundVolume * 100;
-      document.getElementById('volumeValue').textContent = Math.round(soundVolume * 100) + '%';
     }
 
-    function toggleSoundMute() {
+    function toggleSound() {
       soundEnabled = !soundEnabled;
       localStorage.setItem('randomplaysSoundEnabled', soundEnabled);
       updateSoundButton();
@@ -1724,28 +1719,21 @@
 
     function updateSoundButton() {
       const btn = document.getElementById('soundToggle');
-      const muteBtn = document.getElementById('soundMuteBtn');
-      
+      const settingBtn = document.getElementById('soundSettingBtn');
       if (btn) {
         btn.textContent = soundEnabled ? '🔊' : '🔇';
         btn.classList.toggle('muted', !soundEnabled);
       }
-      if (muteBtn) {
-        muteBtn.textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+      if (settingBtn) {
+        settingBtn.textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
       }
     }
 
-    function updateVolume() {
-      const slider = document.getElementById('volumeSlider');
-      soundVolume = slider.value / 100;
-      localStorage.setItem('randomplaysSoundVolume', soundVolume);
-      document.getElementById('volumeValue').textContent = Math.round(soundVolume * 100) + '%';
-      playClickSound();
-    }
-
+    // Create audio context
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    function playSound(frequency, duration = 0.1, type = 'sine', baseVolume = 0.3) {
+    // Sound effects using Web Audio API
+    function playSound(frequency, duration = 0.1, type = 'sine', volume = 0.3) {
       if (!soundEnabled) return;
       
       try {
@@ -1758,8 +1746,7 @@
         oscillator.frequency.value = frequency;
         oscillator.type = type;
         
-        const finalVolume = baseVolume * soundVolume;
-        gainNode.gain.setValueAtTime(finalVolume, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
         
         oscillator.start(audioContext.currentTime);
@@ -1769,15 +1756,16 @@
       }
     }
 
+    // Define sounds
     function playClickSound() {
       playSound(800, 0.05, 'sine', 0.2);
     }
 
     function playWinSound() {
       if (!soundEnabled) return;
-      playSound(523, 0.15, 'sine', 0.3);
-      setTimeout(() => playSound(659, 0.15, 'sine', 0.3), 150);
-      setTimeout(() => playSound(784, 0.3, 'sine', 0.3), 300);
+      playSound(523, 0.15, 'sine', 0.3); // C
+      setTimeout(() => playSound(659, 0.15, 'sine', 0.3), 150); // E
+      setTimeout(() => playSound(784, 0.3, 'sine', 0.3), 300); // G
     }
 
     function playLoseSound() {
@@ -1798,7 +1786,7 @@
       setTimeout(() => playSound(784, 0.2, 'sine', 0.3), 200);
     }
 
-    // SECURITY QUESTIONS
+    // SECURITY QUESTIONS MAPPING
     const securityQuestions = {
       'what_is_your_favorite_game': 'What is your favorite game?',
       'what_is_your_pet_name': "What is your pet's name?",
@@ -1809,9 +1797,7 @@
       'what_is_your_favorite_food': 'What is your favorite food?',
       'what_is_your_dream_job': 'What is your dream job?',
       'what_school_did_you_attend': 'What school did you first attend?',
-      'what_is_your_favorite_book': 'What is your favorite book?',
-      'what_is_your_favorite_sport': 'What is your favorite sport?',
-      'what_is_your_favorite_artist': 'What is your favorite artist?'
+      'what_is_your_favorite_book': 'What is your favorite book?'
     };
 
     // Registered Users System
@@ -1826,6 +1812,7 @@
           registeredUsers = {};
         }
       } catch (e) {
+        console.error('Error loading users:', e);
         registeredUsers = {};
       }
     }
@@ -1834,7 +1821,7 @@
       localStorage.setItem('randomplaysUsers', JSON.stringify(registeredUsers));
     }
 
-    // Game State
+    // Game State Management
     let gameState = {
       username: "",
       avatar: "🥀",
@@ -1857,7 +1844,8 @@
       try {
         const saved = localStorage.getItem(`randomplaysState_${gameState.username}`);
         if (saved) {
-          gameState = JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          gameState = parsed;
         }
         if (typeof gameState.coins !== 'number' || isNaN(gameState.coins)) {
           gameState.coins = 100;
@@ -1872,12 +1860,23 @@
       localStorage.setItem(`randomplaysState_${gameState.username}`, JSON.stringify(gameState));
     }
 
-    // Auth
+    // Auth Functions
     function toggleAuthForm() {
-      document.getElementById('loginForm').style.display = 
-        document.getElementById('loginForm').style.display === 'none' ? 'block' : 'none';
-      document.getElementById('signupForm').style.display = 
-        document.getElementById('signupForm').style.display === 'none' ? 'block' : 'none';
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+      signupForm.style.display = signupForm.style.display === 'none' ? 'block' : 'none';
+      
+      document.getElementById('usernameError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
+      document.getElementById('questionError').textContent = '';
+      document.getElementById('answerSignupError').textContent = '';
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('signupUsername').value = '';
+      document.getElementById('signupPassword').value = '';
+      document.getElementById('securityQuestion').value = '';
+      document.getElementById('signupSecurityAnswer').value = '';
       playClickSound();
     }
 
@@ -1905,17 +1904,16 @@
       document.getElementById('loginUsername').value = '';
       document.getElementById('loginPassword').value = '';
       navigateHome();
+      playClickSound();
     }
 
     function handleSignup() {
       const username = document.getElementById('signupUsername').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
       const questionKey = document.getElementById('securityQuestion').value;
       const answer = document.getElementById('signupSecurityAnswer').value.trim().toLowerCase();
       
       document.getElementById('usernameError').textContent = '';
-      document.getElementById('emailError').textContent = '';
       document.getElementById('passwordError').textContent = '';
       document.getElementById('questionError').textContent = '';
       document.getElementById('answerSignupError').textContent = '';
@@ -1930,11 +1928,6 @@
         hasError = true;
       } else if (registeredUsers.hasOwnProperty(username)) {
         document.getElementById('usernameError').textContent = 'Username already taken';
-        hasError = true;
-      }
-
-      if (!email) {
-        document.getElementById('emailError').textContent = 'Email is required';
         hasError = true;
       }
 
@@ -1955,7 +1948,7 @@
 
       if (hasError) return;
 
-      registeredUsers[username] = { password, email };
+      registeredUsers[username] = { password };
       saveRegisteredUsers();
 
       gameState = {
@@ -1978,14 +1971,15 @@
       saveGameState();
 
       document.getElementById('signupUsername').value = '';
-      document.getElementById('signupEmail').value = '';
       document.getElementById('signupPassword').value = '';
       document.getElementById('securityQuestion').value = '';
       document.getElementById('signupSecurityAnswer').value = '';
       
       navigateHome();
+      playClickSound();
     }
 
+    // PASSWORD RESET: 3-Step Process
     function openResetPasswordModal() {
       document.getElementById('resetPasswordModal').classList.add('active');
       document.getElementById('resetStep1').style.display = 'block';
@@ -2039,6 +2033,8 @@
       document.getElementById('resetStep1').style.display = 'block';
       document.getElementById('resetStep2').style.display = 'none';
       document.getElementById('resetStep3').style.display = 'none';
+      document.getElementById('resetUsername').value = '';
+      document.getElementById('securityAnswer').value = '';
       clearErrorMessages();
       playClickSound();
     }
@@ -2102,6 +2098,7 @@
       document.getElementById('confirmError').textContent = '';
     }
 
+    // Delete Account Functions
     function openDeleteAccountModal() {
       document.getElementById('deleteAccountModal').classList.add('active');
       playClickSound();
@@ -2120,12 +2117,21 @@
         return;
       }
 
+      // Wipe every trace of this specific account
       delete registeredUsers[username];
       saveRegisteredUsers();
       localStorage.removeItem(`randomplaysState_${username}`);
 
+      // Clear in-memory state WITHOUT saving it back (avoids resurrecting the deleted account)
+      gameState = { username: "" };
+
       closeDeleteAccountModal();
-      logout();
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      showScreen('loginScreen');
+      playClickSound();
       
       showError('Account Deleted', 'Your account has been permanently deleted');
     }
@@ -2141,6 +2147,7 @@
       playClickSound();
     }
 
+    // Error Modal
     function showError(title, text) {
       document.getElementById('errorTitle').textContent = title;
       document.getElementById('errorText').textContent = text;
@@ -2153,6 +2160,7 @@
       playClickSound();
     }
 
+    // Navigation
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(screenId).classList.add('active');
@@ -2198,6 +2206,7 @@
       }
     }
 
+    // Ludo Modal
     function openLudoModal() {
       document.getElementById('ludoModal').classList.add('active');
       playClickSound();
@@ -2215,6 +2224,7 @@
       playClickSound();
     }
 
+    // UI Updates
     function updateUI() {
       const coinAmount = parseInt(gameState.coins) || 0;
       
@@ -2262,22 +2272,22 @@
       document.getElementById('settingsAvatar').textContent = gameState.avatar;
     }
 
-    // Battle Pass
+    // Battle Pass System
     const BP_LEVELS = 50;
     const XP_PER_LEVEL = 1000;
     const BP_REWARDS = [
-      { level: 1, icon: '⭐' },
-      { level: 5, icon: '🎁' },
-      { level: 10, icon: '💎' },
-      { level: 15, icon: '👑' },
-      { level: 20, icon: '🔥' },
-      { level: 25, icon: '🌟' },
-      { level: 30, icon: '🚀' },
-      { level: 50, icon: '👼' }
+      { level: 1, icon: '⭐', name: 'Start', reward: '50 Coins' },
+      { level: 5, icon: '🎁', name: 'Tier 5', reward: 'Avatar: 😎' },
+      { level: 10, icon: '💎', name: 'Elite', reward: 'Board: Neon' },
+      { level: 15, icon: '👑', name: 'Royalty', reward: '200 Coins' },
+      { level: 20, icon: '🔥', name: 'On Fire', reward: 'Avatar: 🤖' },
+      { level: 25, icon: '🌟', name: 'Legendary', reward: 'Board: Sunset' },
+      { level: 30, icon: '🚀', name: 'Ascend', reward: '500 Coins' },
+      { level: 50, icon: '👼', name: 'Godlike', reward: 'Avatar: 🦄' }
     ];
 
     function renderBattlePass() {
-      const maxXp = XP_PER_LEVEL;
+      const maxXp = gameState.bpLevel < BP_LEVELS ? XP_PER_LEVEL : XP_PER_LEVEL;
       const xpPercent = (gameState.bpXp / maxXp) * 100;
 
       document.getElementById('bpLevel').textContent = gameState.bpLevel;
@@ -2311,17 +2321,17 @@
       saveGameState();
     }
 
-    // Shop
+    // Shop System
     const AVATARS = [
-      { emoji: "🥀", name: "Rose", price: 0 },
-      { emoji: "😎", name: "Cool", price: 500 },
-      { emoji: "🤖", name: "Robot", price: 750 },
-      { emoji: "👾", name: "Pixel", price: 1000 },
-      { emoji: "🎭", name: "Theater", price: 1500 },
-      { emoji: "🦄", name: "Unicorn", price: 2000 },
-      { emoji: "🐉", name: "Dragon", price: 2500 },
-      { emoji: "🦸", name: "Hero", price: 3000 },
-      { emoji: "🧙", name: "Wizard", price: 4000 }
+      { emoji: "🥀", name: "Rose", price: 0, rarity: "common" },
+      { emoji: "😎", name: "Cool", price: 500, rarity: "common" },
+      { emoji: "🤖", name: "Robot", price: 750, rarity: "rare" },
+      { emoji: "👾", name: "Pixel", price: 1000, rarity: "rare" },
+      { emoji: "🎭", name: "Theater", price: 1500, rarity: "rare" },
+      { emoji: "🦄", name: "Unicorn", price: 2000, rarity: "epic" },
+      { emoji: "🐉", name: "Dragon", price: 2500, rarity: "epic" },
+      { emoji: "🦸", name: "Hero", price: 3000, rarity: "epic" },
+      { emoji: "🧙", name: "Wizard", price: 4000, rarity: "legendary" }
     ];
 
     const BOARDS = [
@@ -2515,7 +2525,7 @@
       }
     }
 
-    // TIC TAC TOE
+    // ===== TIC TAC TOE LOGIC =====
     const board = document.getElementById("board");
     const status = document.getElementById("status");
     const scoreDisplay = document.getElementById("score");
@@ -2645,22 +2655,25 @@
       restartGame();
       status.textContent = vsAI ? "You vs AI — X Starts" : "Two-Player Mode";
       modeSelector.style.display = vsAI ? "flex" : "none";
+      playClickSound();
     }
 
     function disableDifficultyButtons() {
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.disabled = true);
+      const btns = document.querySelectorAll('.mode-btn');
+      btns.forEach(btn => btn.disabled = true);
     }
 
     function enableDifficultyButtons() {
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.disabled = false);
+      const btns = document.querySelectorAll('.mode-btn');
+      btns.forEach(btn => btn.disabled = false);
     }
 
     function setDifficulty(level) {
       if (matchStarted) return;
       difficulty = level;
-      document.querySelectorAll(".mode-btn").forEach(btn => {
+      for (let btn of modeSelector.querySelectorAll(".mode-btn")) {
         btn.classList.toggle("active", btn.dataset.level === level);
-      });
+      }
       playClickSound();
     }
 
@@ -2737,7 +2750,7 @@
 
     setDifficulty("easy");
 
-    // LUDO
+    // ===== LUDO LOGIC =====
     let ludoState = {
       currentPlayer: 0,
       redPos: 0,
@@ -2771,9 +2784,11 @@
         playWinSound();
       } else if (ludoState.yellowPos === 52) {
         document.getElementById('ludoStatus').textContent = '🎉 Yellow Player Wins!';
-        ludoState.gameWon = true;gameState.stats.ludo.wins++;
+        ludoState.gameWon = true;
+        gameState.stats.ludo.wins++;
         gameState.stats.ludo.streak++;
         addXp(300);
+        playWinSound();
       } else {
         ludoState.currentPlayer = 1 - ludoState.currentPlayer;
         const playerColor = ludoState.currentPlayer === 0 ? '🔴 Red' : '🟡 Yellow';
@@ -2790,8 +2805,34 @@
       document.getElementById('yellowPos').textContent = ludoState.yellowPos;
     }
 
+    // ===== ONE-TIME MIGRATION =====
+    // Old accounts were created before security questions existed, so they
+    // can never pass the new password-reset flow. This runs once, wipes
+    // every old account + saved game state, and never runs again.
+    function runOneTimeWipeMigration() {
+      const MIGRATION_KEY = 'randomplaysMigration_securityQuestionsWipe_v1';
+      if (localStorage.getItem(MIGRATION_KEY)) return; // already ran, skip
+
+      // Remove the master user list
+      localStorage.removeItem('randomplaysUsers');
+
+      // Remove every per-user saved game state key
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('randomplaysState_')) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+
+      localStorage.setItem(MIGRATION_KEY, 'true');
+    }
+
     // Initialize on load
+    runOneTimeWipeMigration();
     loadRegisteredUsers();
+    loadSoundPreference();
     loadGameState();
 
     if ('serviceWorker' in navigator) {
