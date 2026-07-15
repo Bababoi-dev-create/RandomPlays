@@ -1249,15 +1249,41 @@
   </style>
 </head>
 <body>
-  <!-- MODAL FOR LUDO -->
-  <div class="modal-overlay" id="ludoModal">
+  <!-- LUDO SETUP MODAL -->
+  <div class="modal-overlay" id="ludoSetupModal">
     <div class="modal-content">
-      <div class="modal-icon">🚧</div>
-      <div class="modal-title">Under Development</div>
-      <div class="modal-text">Ludo is coming soon! Would you like to play a preview version?</div>
-      <div class="modal-buttons">
-        <button class="modal-btn modal-btn-secondary" onclick="closeLudoModal()">Cancel</button>
-        <button class="modal-btn modal-btn-primary" onclick="confirmLudo()">Play Preview</button>
+      <div class="modal-icon">🎲</div>
+      <div class="modal-title">Ludo Setup</div>
+      
+      <div id="ludoModeSection">
+        <div class="modal-text">Choose your game mode:</div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 20px;">
+          <button style="padding: 14px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; color: #333; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#667eea'; this.style.backgroundColor='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.color='white';" onmouseout="this.style.borderColor='transparent'; this.style.backgroundColor='linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'; this.style.color='#333';" onclick="selectLudoMode('1v3')">1 Player vs 3 AI</button>
+          <button style="padding: 14px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; color: #333; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#667eea'; this.style.backgroundColor='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.color='white';" onmouseout="this.style.borderColor='transparent'; this.style.backgroundColor='linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'; this.style.color='#333';" onclick="selectLudoMode('2v2')">2 Players vs 2 AI</button>
+          <button style="padding: 14px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; color: #333; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#667eea'; this.style.backgroundColor='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.color='white';" onmouseout="this.style.borderColor='transparent'; this.style.backgroundColor='linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'; this.style.color='#333';" onclick="selectLudoMode('3v1')">3 Players vs 1 AI</button>
+          <button style="padding: 14px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; color: #333; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#667eea'; this.style.backgroundColor='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.color='white';" onmouseout="this.style.borderColor='transparent'; this.style.backgroundColor='linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'; this.style.color='#333';" onclick="selectLudoMode('4p')">4 Players (No AI)</button>
+        </div>
+      </div>
+
+      <div id="ludoDifficultySection" style="display: none;">
+        <div class="modal-text">Select AI Difficulty:</div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+          <button class="mode-btn" data-level="easy" onclick="selectLudoDifficulty('easy')">Easy</button>
+          <button class="mode-btn" data-level="medium" onclick="selectLudoDifficulty('medium')">Medium</button>
+          <button class="mode-btn" data-level="hard" onclick="selectLudoDifficulty('hard')">Hard</button>
+          <button class="mode-btn" data-level="impossible" onclick="selectLudoDifficulty('impossible')">Impossible</button>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-secondary" onclick="backToLudoModeSelect()">Back</button>
+          <button class="modal-btn modal-btn-primary" onclick="startLudoGame()">Start Game</button>
+        </div>
+      </div>
+
+      <div id="ludoNoAISection" style="display: none;">
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-secondary" onclick="backToLudoModeSelect()">Back</button>
+          <button class="modal-btn modal-btn-primary" onclick="startLudoGame()">Start Game</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1464,7 +1490,7 @@
           <div class="game-icon">🎮</div>
           <div class="game-name">Tic Tac Toe</div>
         </div>
-        <div class="game-card" onclick="openLudoModal()">
+        <div class="game-card" onclick="openLudoSetupModal()">
           <div class="game-icon">🎲</div>
           <div class="game-name">Ludo</div>
         </div>
@@ -1672,27 +1698,35 @@
   </div>
 
   <!-- LUDO GAME SCREEN -->
+  <!-- LUDO GAME SCREEN -->
   <div class="screen" id="ludoScreen">
     <div class="container">
       <div class="game-header">
         <div class="game-title">LUDO</div>
-        <button class="back-btn" onclick="navigateHome()">← Home</button>
+        <button class="back-btn" onclick="ludoQuitGame()">← Home</button>
       </div>
 
-      <div class="ludo-container">
-        <button class="ludo-dice" id="diceBtn" onclick="rollDice()">🎲</button>
-        <div id="diceValue" style="text-align: center; font-size: 18px; font-weight: 600; color: #667eea; margin-bottom: 16px;">Roll the dice!</div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <div style="position: relative; width: 400px; height: 400px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: 3px solid #333; border-radius: 8px; display: grid; grid-template-columns: repeat(13, 1fr); gap: 1px; padding: 8px;" id="ludoBoardGrid"></div>
 
-        <div class="ludo-board" id="ludoBoard"></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%;">
+          <button style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 16px; font-size: 40px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); font-weight: 700;" id="ludoDiceBtn" onclick="ludoRollDice()" disabled>🎲</button>
+          <div style="text-align: center; font-size: 18px; font-weight: 700; color: #667eea; min-height: 28px;" id="ludoDiceValue">Waiting...</div>
+        </div>
 
-        <div class="ludo-info">
-          <div id="ludoStatus" class="ludo-player">Red Player's Turn</div>
-          <div style="text-align: center; margin-top: 12px; font-size: 14px; color: #666;">
-            <span>🔴 Red: <span id="redPos">0</span> | 🟡 Yellow: <span id="yellowPos">0</span></span>
+        <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 16px; border-radius: 12px; width: 100%;">
+          <div style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 8px;" id="ludoTurnDisplay">Red's Turn</div>
+          <div style="font-size: 13px; color: #666; line-height: 1.6;" id="ludoPiecesStatus">Waiting for game...</div>
+        </div>
+
+        <div id="ludoGameOverContainer" style="display: none;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0;">
+            <h3 style="font-size: 24px; margin-bottom: 8px;" id="ludoGameOverTitle">Game Over!</h3>
+            <p style="font-size: 14px; margin-bottom: 12px;" id="ludoGameOverMessage">Waiting for results...</p>
           </div>
         </div>
 
-        <button class="btn btn-primary" onclick="navigateHome()">Back to Home</button>
+        <button class="btn btn-primary" onclick="ludoQuitGame()" style="margin-top: 20px;">Back to Home</button>
       </div>
     </div>
   </div>
@@ -2207,23 +2241,6 @@
     }
 
     // Ludo Modal
-    function openLudoModal() {
-      document.getElementById('ludoModal').classList.add('active');
-      playClickSound();
-    }
-
-    function closeLudoModal() {
-      document.getElementById('ludoModal').classList.remove('active');
-      playClickSound();
-    }
-
-    function confirmLudo() {
-      closeLudoModal();
-      showScreen('ludoScreen');
-      initializeLudo();
-      playClickSound();
-    }
-
     // UI Updates
     function updateUI() {
       const coinAmount = parseInt(gameState.coins) || 0;
@@ -2750,87 +2767,686 @@
 
     setDifficulty("easy");
 
-    // ===== LUDO LOGIC =====
-    let ludoState = {
-      currentPlayer: 0,
-      redPos: 0,
-      yellowPos: 0,
-      gameWon: false
-    };
+    // ===== #Add Ludo-script =====
+    // INSERT NEW LUDO GAME CODE HERE
+// ===== LUDO GAME SYSTEM =====
 
-    function initializeLudo() {
-      ludoState = { currentPlayer: 0, redPos: 0, yellowPos: 0, gameWon: false };
-      renderLudo();
-    }
+// Player colors: 0=Blue, 1=Green, 2=Yellow, 3=Red
+const PLAYER_COLORS = ['blue', 'green', 'yellow', 'red'];
+const PLAYER_EMOJIS = ['🔵', '🟢', '🟡', '🔴'];
+const PLAYER_NAMES = ['Blue', 'Green', 'Yellow', 'Red'];
 
-    function rollDice() {
-      if (ludoState.gameWon) return;
-      const roll = Math.floor(Math.random() * 6) + 1;
-      document.getElementById('diceValue').textContent = 'Rolled: ' + roll + '!';
-      playClickSound();
+// Board configuration
+const BOARD_SIZE = 52; // outer track squares
+const HOME_STRETCH_SIZE = 6;
+const PIECES_PER_PLAYER = 4;
+
+// Safe zones (positions where pieces can't be captured)
+const SAFE_ZONES = [0, 9, 22, 35, 48]; // one per arm plus center entry
+
+// Game state
+let ludoGame = {
+  mode: '1v3', // 1v3, 2v2, 3v1, 4p
+  aiDifficulty: 'easy',
+  humanPlayers: 1, // how many human players
+  gameStarted: false,
+  currentPlayer: 0, // 0=Blue, 1=Green, 2=Yellow, 3=Red
+  diceRoll: 0,
+  consecutiveSixes: 0,
+  gameOver: false,
+  winner: null,
+  
+  // Each player's state
+  players: [
+    { name: 'Blue', pieces: [null, null, null, null], color: 'blue', emoji: '🔵', isAI: true, isActive: true },
+    { name: 'Green', pieces: [null, null, null, null], color: 'green', emoji: '🟢', isAI: true, isActive: true },
+    { name: 'Yellow', pieces: [null, null, null, null], color: 'yellow', emoji: '🟡', isAI: true, isActive: true },
+    { name: 'Red', pieces: [null, null, null, null], color: 'red', emoji: '🔴', isAI: true, isActive: true }
+  ],
+  
+  kills: 0, // captures made by player (only matters in 1v3 mode)
+};
+
+// Sound functions for Ludo
+function ludoPlayDiceSound() {
+  playSound(600, 0.15, 'sine', 0.3);
+  setTimeout(() => playSound(800, 0.15, 'sine', 0.3), 150);
+}
+
+function ludoPlayMoveSound() {
+  playSound(500, 0.1, 'sine', 0.2);
+}
+
+function ludoPlayCaptureSound() {
+  playSound(300, 0.2, 'sine', 0.4);
+  setTimeout(() => playSound(200, 0.1, 'sine', 0.4), 200);
+}
+
+function ludoPlaySafeSound() {
+  playSound(700, 0.1, 'sine', 0.3);
+  setTimeout(() => playSound(900, 0.1, 'sine', 0.3), 100);
+}
+
+function ludoPlayHomeSound() {
+  playSound(1000, 0.15, 'sine', 0.3);
+  setTimeout(() => playSound(1200, 0.2, 'sine', 0.3), 150);
+}
+
+// Setup modal functions
+function selectLudoMode(mode) {
+  ludoGame.mode = mode;
+  
+  // Determine human vs AI
+  if (mode === '1v3') {
+    ludoGame.humanPlayers = 1;
+    ludoGame.players[0].isAI = false; // Blue is human
+    ludoGame.players[1].isAI = true;
+    ludoGame.players[2].isAI = true;
+    ludoGame.players[3].isAI = true;
+    
+    // Show difficulty selection
+    document.getElementById('ludoModeSection').style.display = 'none';
+    document.getElementById('ludoDifficultySection').style.display = 'block';
+  } else if (mode === '2v2') {
+    ludoGame.humanPlayers = 2;
+    ludoGame.players[0].isAI = false; // Blue is human
+    ludoGame.players[1].isAI = true;  // Green is AI
+    ludoGame.players[2].isAI = false; // Yellow is human
+    ludoGame.players[3].isAI = true;  // Red is AI
+    
+    ludoGame.aiDifficulty = 'easy'; // default for 2v2
+    startLudoGame();
+  } else if (mode === '3v1') {
+    ludoGame.humanPlayers = 3;
+    ludoGame.players[0].isAI = false; // Blue is human
+    ludoGame.players[1].isAI = false; // Green is human
+    ludoGame.players[2].isAI = false; // Yellow is human
+    ludoGame.players[3].isAI = true;  // Red is AI
+    
+    ludoGame.aiDifficulty = 'easy'; // default for 3v1
+    startLudoGame();
+  } else if (mode === '4p') {
+    ludoGame.humanPlayers = 4;
+    ludoGame.players.forEach(p => p.isAI = false);
+    
+    ludoGame.aiDifficulty = 'none';
+    startLudoGame();
+  }
+  
+  playClickSound();
+}
+
+function selectLudoDifficulty(difficulty) {
+  ludoGame.aiDifficulty = difficulty;
+  
+  // Highlight selected
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.level === difficulty);
+  });
+  
+  playClickSound();
+}
+
+function backToLudoModeSelect() {
+  document.getElementById('ludoModeSection').style.display = 'block';
+  document.getElementById('ludoDifficultySection').style.display = 'none';
+  document.getElementById('ludoNoAISection').style.display = 'none';
+  playClickSound();
+}
+
+function openLudoSetupModal() {
+  document.getElementById('ludoSetupModal').classList.add('active');
+  
+  // Reset to mode selection
+  document.getElementById('ludoModeSection').style.display = 'block';
+  document.getElementById('ludoDifficultySection').style.display = 'none';
+  document.getElementById('ludoNoAISection').style.display = 'none';
+  
+  playClickSound();
+}
+
+function closeLudoSetupModal() {
+  document.getElementById('ludoSetupModal').classList.remove('active');
+  playClickSound();
+}
+
+function startLudoGame() {
+  closeLudoSetupModal();
+  
+  // Reset game state
+  ludoGame.gameStarted = true;
+  ludoGame.gameOver = false;
+  ludoGame.winner = null;
+  ludoGame.currentPlayer = 0; // Blue always starts
+  ludoGame.diceRoll = 0;
+  ludoGame.consecutiveSixes = 0;
+  ludoGame.kills = 0;
+  
+  // Initialize pieces (null means at home, 0-51 = position on track, 52-57 = home stretch)
+  ludoGame.players.forEach((player, idx) => {
+    player.pieces = [null, null, null, null];
+  });
+  
+  renderLudoBoard();
+  updateLudoStatus();
+  enableLudoDiceBtn();
+  
+  playClickSound();
+}
+
+function ludoQuitGame() {
+  ludoGame.gameStarted = false;
+  ludoGame.gameOver = false;
+  navigateHome();
+  playClickSound();
+}
+
+// Board rendering
+function renderLudoBoard() {
+  const grid = document.getElementById('ludoBoardGrid');
+  grid.innerHTML = '';
+  
+  // Create board squares - 13x13 cross pattern
+  const boardLayout = createBoardLayout();
+  
+  boardLayout.forEach((row, r) => {
+    row.forEach((cell, c) => {
+      const square = document.createElement('div');
+      square.style.cssText = `
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        color: #666;
+        aspect-ratio: 1;
+      `;
       
-      if (ludoState.currentPlayer === 0) {
-        ludoState.redPos = Math.min(ludoState.redPos + roll, 52);
-      } else {
-        ludoState.yellowPos = Math.min(ludoState.yellowPos + roll, 52);
+      if (cell === null) {
+        square.style.background = 'transparent';
+        square.style.border = 'none';
+      } else if (cell.type === 'safe') {
+        square.style.background = 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)';
+        square.style.borderColor = '#ff9800';
+        square.style.borderWidth = '2px';
+        square.innerHTML = '⭐';
+      } else if (cell.type === 'track') {
+        // Check if pieces are on this square
+        let piecesHere = [];
+        ludoGame.players.forEach((player, pIdx) => {
+          player.pieces.forEach((pos, pieceIdx) => {
+            if (pos === cell.index) {
+              piecesHere.push({ pIdx, pieceIdx, pos });
+            }
+          });
+        });
+        
+        if (piecesHere.length > 0) {
+          square.innerHTML = piecesHere.map(p => ludoGame.players[p.pIdx].emoji).join('');
+          square.style.background = '#f0f0f0';
+        }
+      } else if (cell.type === 'home') {
+        square.style.background = `linear-gradient(135deg, ${getPlayerColor(cell.player)} 0%, ${getPlayerColor(cell.player)}99 100%)`;
+        
+        // Check pieces in home stretch
+        let piecesHere = [];
+        ludoGame.players[cell.player].pieces.forEach((pos, pieceIdx) => {
+          if (pos >= 52 && pos - 52 === cell.index) {
+            piecesHere.push({ pieceIdx, pos });
+          }
+        });
+        
+        if (piecesHere.length > 0) {
+          square.innerHTML = ludoGame.players[cell.player].emoji;
+          square.style.fontWeight = '700';
+        }
+        square.style.fontSize = '12px';
       }
+      
+      grid.appendChild(square);
+    });
+  });
+}
 
-      if (ludoState.redPos === 52) {
-        document.getElementById('ludoStatus').textContent = '🎉 Red Player Wins!';
-        ludoState.gameWon = true;
-        gameState.stats.ludo.wins++;
-        gameState.stats.ludo.streak++;
-        addXp(300);
-        playWinSound();
-      } else if (ludoState.yellowPos === 52) {
-        document.getElementById('ludoStatus').textContent = '🎉 Yellow Player Wins!';
-        ludoState.gameWon = true;
-        gameState.stats.ludo.wins++;
-        gameState.stats.ludo.streak++;
-        addXp(300);
-        playWinSound();
-      } else {
-        ludoState.currentPlayer = 1 - ludoState.currentPlayer;
-        const playerColor = ludoState.currentPlayer === 0 ? '🔴 Red' : '🟡 Yellow';
-        document.getElementById('ludoStatus').textContent = playerColor + " Player's Turn";
+function createBoardLayout() {
+  const layout = Array(13).fill(null).map(() => Array(13).fill(null));
+  
+  // Fill cross pattern with board positions
+  let trackIndex = 0;
+  
+  // Top vertical (0-12)
+  for (let i = 0; i < 13; i++) {
+    layout[i][6] = { type: 'track', index: trackIndex++ };
+  }
+  
+  // Right horizontal (skip center, 13-25)
+  for (let i = 7; i < 13; i++) {
+    layout[6][i] = { type: 'track', index: trackIndex++ };
+  }
+  
+  // Bottom vertical (26-38)
+  for (let i = 12; i >= 0; i--) {
+    layout[i][6] = { type: 'track', index: trackIndex++ };
+  }
+  
+  // Left horizontal (skip center, 39-51)
+  for (let i = 5; i >= 0; i--) {
+    layout[6][i] = { type: 'track', index: trackIndex++ };
+  }
+  
+  // Home stretches
+  for (let player = 0; player < 4; player++) {
+    for (let i = 0; i < 6; i++) {
+      let row, col;
+      if (player === 0) { // Blue - top left
+        row = i; col = 5;
+      } else if (player === 1) { // Green - top right
+        row = 5; col = 7 + i;
+      } else if (player === 2) { // Yellow - bottom right
+        row = 12 - i; col = 7;
+      } else { // Red - bottom left
+        row = 7; col = 5 - i;
       }
-
-      gameState.stats.ludo.games++;
-      saveGameState();
-      renderLudo();
+      layout[row][col] = { type: 'home', player, index: i };
     }
-
-    function renderLudo() {
-      document.getElementById('redPos').textContent = ludoState.redPos;
-      document.getElementById('yellowPos').textContent = ludoState.yellowPos;
+  }
+  
+  // Safe zones
+  const safePositions = [
+    { row: 0, col: 6 }, // Blue start
+    { row: 6, col: 12 }, // Green start
+    { row: 12, col: 6 }, // Yellow start
+    { row: 6, col: 0 } // Red start
+  ];
+  
+  safePositions.forEach(pos => {
+    if (layout[pos.row][pos.col] && layout[pos.row][pos.col].type === 'track') {
+      layout[pos.row][pos.col].type = 'safe';
     }
+  });
+  
+  return layout;
+}
 
-    // ===== ONE-TIME MIGRATION =====
-    // Old accounts were created before security questions existed, so they
-    // can never pass the new password-reset flow. This runs once, wipes
-    // every old account + saved game state, and never runs again.
-    function runOneTimeWipeMigration() {
-      const MIGRATION_KEY = 'randomplaysMigration_securityQuestionsWipe_v1';
-      if (localStorage.getItem(MIGRATION_KEY)) return; // already ran, skip
+function getPlayerColor(playerIdx) {
+  const colors = {
+    0: '#2196f3', // Blue
+    1: '#4caf50', // Green
+    2: '#ffeb3b', // Yellow
+    3: '#ef4444'  // Red
+  };
+  return colors[playerIdx] || '#999';
+}
 
-      // Remove the master user list
-      localStorage.removeItem('randomplaysUsers');
+// Dice and turn logic
+function ludoRollDice() {
+  if (ludoGame.gameOver) return;
+  
+  const diceBtn = document.getElementById('ludoDiceBtn');
+  diceBtn.disabled = true;
+  
+  ludoGame.diceRoll = Math.floor(Math.random() * 6) + 1;
+  ludoPlayDiceSound();
+  
+  document.getElementById('ludoDiceValue').textContent = `Rolled: ${ludoGame.diceRoll}!`;
+  
+  setTimeout(() => {
+    handleDiceRoll();
+  }, 500);
+}
 
-      // Remove every per-user saved game state key
-      const keysToRemove = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('randomplaysState_')) {
-          keysToRemove.push(key);
+function handleDiceRoll() {
+  const currentPlayer = ludoGame.players[ludoGame.currentPlayer];
+  const roll = ludoGame.diceRoll;
+  
+  // Check if 6 rolled
+  if (roll === 6) {
+    ludoGame.consecutiveSixes++;
+    
+    // 3 sixes in a row = forfeit turn
+    if (ludoGame.consecutiveSixes >= 3) {
+      document.getElementById('ludoDiceValue').textContent = '3 Sixes! Turn forfeited.';
+      setTimeout(() => {
+        ludoGame.consecutiveSixes = 0;
+        nextPlayer();
+      }, 1000);
+      return;
+    }
+  } else {
+    ludoGame.consecutiveSixes = 0;
+  }
+  
+  // Get valid moves
+  const validMoves = getValidMoves(ludoGame.currentPlayer, roll);
+  
+  if (validMoves.length === 0) {
+    document.getElementById('ludoDiceValue').textContent = 'No valid moves!';
+    setTimeout(() => {
+      if (roll !== 6) {
+        nextPlayer();
+      } else {
+        document.getElementById('ludoDiceValue').textContent = 'Rolling again (6 rolled)...';
+        setTimeout(() => {
+          const diceBtn = document.getElementById('ludoDiceBtn');
+          diceBtn.disabled = false;
+          document.getElementById('ludoDiceValue').textContent = 'Roll dice!';
+        }, 1000);
+      }
+    }, 1000);
+    return;
+  }
+  
+  // If AI, make move
+  if (currentPlayer.isAI) {
+    setTimeout(() => {
+      const move = chooseAIMove(ludoGame.currentPlayer, validMoves);
+      executePieceMove(ludoGame.currentPlayer, move.pieceIdx, roll);
+      
+      setTimeout(() => {
+        if (ludoGame.diceRoll !== 6 || ludoGame.gameOver) {
+          nextPlayer();
+        } else {
+          ludoGame.diceRoll = 0;
+          ludoGame.consecutiveSixes--;
+          const diceBtn = document.getElementById('ludoDiceBtn');
+          diceBtn.disabled = false;
+          document.getElementById('ludoDiceValue').textContent = 'Roll again (6 rolled)!';
+          updateLudoStatus();
+        }
+      }, 500);
+    }, 800);
+  } else {
+    // Human player - wait for piece selection
+    document.getElementById('ludoDiceValue').textContent = 'Select a piece to move';
+    // Enable piece selection UI (not implemented for simplicity, auto-move single valid)
+    if (validMoves.length === 1) {
+      setTimeout(() => {
+        executePieceMove(ludoGame.currentPlayer, validMoves[0].pieceIdx, roll);
+        setTimeout(() => {
+          if (ludoGame.diceRoll !== 6 || ludoGame.gameOver) {
+            nextPlayer();
+          } else {
+            ludoGame.diceRoll = 0;
+            ludoGame.consecutiveSixes--;
+            const diceBtn = document.getElementById('ludoDiceBtn');
+            diceBtn.disabled = false;
+            document.getElementById('ludoDiceValue').textContent = 'Roll again (6 rolled)!';
+            updateLudoStatus();
+          }
+        }, 500);
+      }, 1500);
+    }
+  }
+}
+
+function getValidMoves(playerIdx, roll) {
+  const moves = [];
+  const player = ludoGame.players[playerIdx];
+  
+  player.pieces.forEach((pos, pieceIdx) => {
+    // Can't move if at finish
+    if (pos === 'finished') return;
+    
+    // Only roll 6 can release from home
+    if (pos === null && roll === 6) {
+      moves.push({ pieceIdx, type: 'enter' });
+    } else if (pos !== null) {
+      // Piece on board - can move
+      const newPos = calculateNewPos(pos, roll, playerIdx);
+      if (newPos !== false) {
+        moves.push({ pieceIdx, type: 'move', newPos });
+      }
+    }
+  });
+  
+  return moves;
+}
+
+function calculateNewPos(currentPos, roll, playerIdx) {
+  // Simple movement: track + home stretch = 52 + 6 = 58 total
+  const newPos = currentPos + roll;
+  
+  // Can't overshoot finish
+  if (newPos > 57) return false;
+  
+  // If entering home stretch
+  if (newPos >= 52) {
+    return newPos;
+  }
+  
+  return newPos % 52;
+}
+
+function executePieceMove(playerIdx, pieceIdx, roll) {
+  const piece = ludoGame.players[playerIdx].pieces[pieceIdx];
+  
+  if (piece === null && roll === 6) {
+    // Enter from home
+    ludoGame.players[playerIdx].pieces[pieceIdx] = 0;
+    ludoPlayMoveSound();
+  } else if (piece !== null) {
+    const newPos = calculateNewPos(piece, roll, playerIdx);
+    
+    if (newPos !== false) {
+      // Check for capture
+      checkCapture(newPos, playerIdx);
+      
+      // Move piece
+      ludoGame.players[playerIdx].pieces[pieceIdx] = newPos;
+      ludoPlayMoveSound();
+      
+      // Check if reached home
+      if (newPos >= 52) {
+        ludoPlayHomeSound();
+        addXp(50); // Small XP bonus for piece home
+        
+        // Check if all pieces home (win)
+        checkGameWin(playerIdx);
+      }
+      
+      // Safe zone bonus
+      if (SAFE_ZONES.includes(newPos)) {
+        ludoPlaySafeSound();
+      }
+    }
+  }
+  
+  renderLudoBoard();
+}
+
+function checkCapture(pos, playerIdx) {
+  ludoGame.players.forEach((player, pIdx) => {
+    if (pIdx === playerIdx) return; // Don't capture own pieces
+    
+    player.pieces.forEach((pPos, pIdx) => {
+      if (pPos === pos && !SAFE_ZONES.includes(pos)) {
+        // Capture!
+        player.pieces[pIdx] = null;
+        ludoPlayCaptureSound();
+        
+        // Award coins in 1v3 mode only
+        if (ludoGame.mode === '1v3' && !ludoGame.players[playerIdx].isAI) {
+          ludoGame.kills++;
+          gameState.coins += 5;
+          playCoinSound();
         }
       }
-      keysToRemove.forEach(key => localStorage.removeItem(key));
+    });
+  });
+}
 
-      localStorage.setItem(MIGRATION_KEY, 'true');
+function checkGameWin(playerIdx) {
+  const allHome = ludoGame.players[playerIdx].pieces.every(p => p >= 52 || p === 'finished');
+  
+  if (allHome) {
+    ludoGame.gameOver = true;
+    ludoGame.winner = playerIdx;
+    playWinSound();
+    
+    showLudoGameOver(playerIdx);
+  }
+}
+
+function showLudoGameOver(winnerIdx) {
+  const container = document.getElementById('ludoGameOverContainer');
+  const title = document.getElementById('ludoGameOverTitle');
+  const message = document.getElementById('ludoGameOverMessage');
+  const player = ludoGame.players[winnerIdx];
+  
+  title.textContent = `${player.emoji} ${player.name} Wins!`;
+  
+  let coinReward = 0;
+  let xpReward = 0;
+  
+  // Calculate rewards
+  if (ludoGame.mode === '1v3') {
+    if (!ludoGame.players[winnerIdx].isAI) {
+      // Human player won
+      const diffMap = {
+        'easy': { win: 50, lose: 30 },
+        'medium': { win: 100, lose: 80 },
+        'hard': { win: 100, lose: 100 },
+        'impossible': { win: 1000, lose: 75 }
+      };
+      coinReward = diffMap[ludoGame.aiDifficulty].win;
+      xpReward = 400;
+      
+      gameState.stats.ludo.wins++;
+      gameState.stats.ludo.streak++;
+      gameState.coins += coinReward;
+      addXp(xpReward);
+      
+      message.innerHTML = `${player.emoji} You Win!<br>🪙 +${coinReward} coins<br>⭐ +${xpReward} XP`;
+    } else {
+      // AI won - human lost
+      const diffMap = {
+        'easy': { win: 50, lose: 30 },
+        'medium': { win: 100, lose: 80 },
+        'hard': { win: 100, lose: 100 },
+        'impossible': { win: 1000, lose: 75 }
+      };
+      coinReward = diffMap[ludoGame.aiDifficulty].lose;
+      xpReward = 200;
+      
+      gameState.stats.ludo.losses = (gameState.stats.ludo.losses || 0) + 1;
+      gameState.stats.ludo.streak = 0;
+      gameState.coins += coinReward;
+      addXp(xpReward);
+      
+      message.innerHTML = `${player.emoji} ${player.name} Won<br>🪙 +${coinReward} coins<br>⭐ +${xpReward} XP`;
     }
+  } else {
+    // Multiplayer - no coins
+    message.innerHTML = `${player.emoji} ${player.name} is the Champion!`;
+    xpReward = 200;
+    addXp(xpReward);
+  }
+  
+  gameState.stats.ludo.games++;
+  saveGameState();
+  container.style.display = 'block';
+  
+  const diceBtn = document.getElementById('ludoDiceBtn');
+  diceBtn.disabled = true;
+}
 
+function nextPlayer() {
+  let nextIdx = (ludoGame.currentPlayer + 1) % 4;
+  
+  // Skip inactive players
+  while (!ludoGame.players[nextIdx].isActive && nextIdx !== ludoGame.currentPlayer) {
+    nextIdx = (nextIdx + 1) % 4;
+  }
+  
+  ludoGame.currentPlayer = nextIdx;
+  ludoGame.diceRoll = 0;
+  ludoGame.consecutiveSixes = 0;
+  
+  updateLudoStatus();
+  enableLudoDiceBtn();
+}
+
+function enableLudoDiceBtn() {
+  const diceBtn = document.getElementById('ludoDiceBtn');
+  if (!ludoGame.gameOver) {
+    diceBtn.disabled = false;
+    document.getElementById('ludoDiceValue').textContent = 'Roll dice!';
+  }
+}
+
+function updateLudoStatus() {
+  const player = ludoGame.players[ludoGame.currentPlayer];
+  document.getElementById('ludoTurnDisplay').textContent = `${player.emoji} ${player.name}'s Turn`;
+  
+  // Show piece positions
+  let status = '';
+  ludoGame.players.forEach((p, idx) => {
+    const home = p.pieces.filter(pos => pos === null).length;
+    const board = p.pieces.filter(pos => pos !== null && pos < 52).length;
+    const homeStretch = p.pieces.filter(pos => pos >= 52).length;
+    
+    status += `${p.emoji} ${p.name}: ${home}H ${board}B ${homeStretch}F | `;
+  });
+  
+  document.getElementById('ludoPiecesStatus').textContent = status;
+}
+
+// AI Logic
+function chooseAIMove(playerIdx, validMoves) {
+  const difficulty = ludoGame.aiDifficulty;
+  
+  if (difficulty === 'easy') {
+    return validMoves[Math.floor(Math.random() * validMoves.length)];
+  } else if (difficulty === 'medium') {
+    // Prefer entering pieces or safe moves
+    const enterMoves = validMoves.filter(m => m.type === 'enter');
+    if (enterMoves.length > 0 && Math.random() < 0.6) {
+      return enterMoves[0];
+    }
+    return validMoves[Math.floor(Math.random() * validMoves.length)];
+  } else if (difficulty === 'hard') {
+    // Always enter if possible, otherwise move furthest piece
+    const enterMoves = validMoves.filter(m => m.type === 'enter');
+    if (enterMoves.length > 0) {
+      return enterMoves[0];
+    }
+    return validMoves.reduce((best, m) => {
+      if (m.newPos > (best.newPos || 0)) return m;
+      return best;
+    });
+  } else if (difficulty === 'impossible') {
+    // Optimal: enter > capture > progress > safety
+    const enterMoves = validMoves.filter(m => m.type === 'enter');
+    if (enterMoves.length > 0) return enterMoves[0];
+    
+    // Check for capture opportunities
+    const player = ludoGame.players[playerIdx];
+    for (let move of validMoves) {
+      const newPos = move.newPos || 0;
+      const wouldCapture = ludoGame.players.some((p, idx) => {
+        if (idx === playerIdx) return false;
+        return p.pieces.some(pos => pos === newPos && !SAFE_ZONES.includes(pos));
+      });
+      if (wouldCapture) return move;
+    }
+    
+    // Otherwise progress furthest
+    return validMoves.reduce((best, m) => {
+      if (m.newPos > (best.newPos || 0)) return m;
+      return best;
+    });
+  }
+}
+
+// Game initialization helpers
+function initializeLudo() {
+  // Called when entering ludoScreen, reset if needed
+}
     // Initialize on load
-    runOneTimeWipeMigration();
     loadRegisteredUsers();
     loadSoundPreference();
     loadGameState();
